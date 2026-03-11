@@ -3,11 +3,29 @@
 const menuToggle = document.getElementById("menuToggle");
 const navLinks = document.querySelector(".nav-links");
 
-if(menuToggle){
-menuToggle.addEventListener("click", () => {
+if(menuToggle && navLinks){
+
+menuToggle.addEventListener("click", (e) => {
+
+e.stopPropagation();
 navLinks.classList.toggle("active");
+
 });
+
+/* CLOSE MENU IF CLICKED OUTSIDE */
+
+document.addEventListener("click", (e)=>{
+
+if(!menuToggle.contains(e.target) && !navLinks.contains(e.target)){
+
+navLinks.classList.remove("active");
+
 }
+
+});
+
+}
+
 
 /* SMOOTH SCROLL FOR SAME PAGE LINKS */
 
@@ -22,9 +40,7 @@ if(target){
 e.preventDefault();
 
 const headerOffset = document.querySelector(".header").offsetHeight;
-
 const elementPosition = target.getBoundingClientRect().top;
-
 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
 window.scrollTo({
@@ -32,13 +48,16 @@ top: offsetPosition,
 behavior: "smooth"
 });
 
+if(navLinks){
 navLinks.classList.remove("active");
+}
 
 }
 
 });
 
 });
+
 
 /* THEME SWITCH */
 
@@ -58,8 +77,7 @@ if(logo){
 logo.style.filter = "invert(1)";
 }
 
-}
-else{
+}else{
 
 body.classList.add("dark");
 body.classList.remove("light");
@@ -83,12 +101,13 @@ setTheme("dark");
 }
 
 if(lightIcon){
-lightIcon.addEventListener("click", () => setTheme("light"));
+lightIcon.addEventListener("click", ()=> setTheme("light"));
 }
 
 if(darkIcon){
-darkIcon.addEventListener("click", () => setTheme("dark"));
+darkIcon.addEventListener("click", ()=> setTheme("dark"));
 }
+
 
 /* LIGHTBOX SYSTEM */
 
@@ -111,7 +130,7 @@ const details = item.querySelector(".photo-details")
 ? item.querySelector(".photo-details").innerHTML
 : "";
 
-img.addEventListener("click", () => {
+img.addEventListener("click", ()=>{
 
 lightbox.style.display = "flex";
 lightboxImg.src = img.src;
@@ -123,9 +142,10 @@ document.body.style.overflow = "hidden";
 
 });
 
+
 if(closeLightbox){
 
-closeLightbox.addEventListener("click", () => {
+closeLightbox.addEventListener("click", ()=>{
 
 lightbox.style.display = "none";
 document.body.style.overflow = "auto";
@@ -134,7 +154,8 @@ document.body.style.overflow = "auto";
 
 }
 
-document.addEventListener("keydown", (e) => {
+
+document.addEventListener("keydown", (e)=>{
 
 if(e.key === "Escape"){
 
@@ -146,6 +167,7 @@ document.body.style.overflow = "auto";
 });
 
 }
+
 
 /* SCROLL REVEAL ANIMATION */
 
