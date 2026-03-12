@@ -1,17 +1,18 @@
 {
   "videos": [
     {
-      "src": "videos/singledroneshot.mov",
+      "embed": true,
+      "src": "https://www.facebook.com/reel/2118232682347743",
       "title": "Single Drone Shot",
       "location": "Dubai, UAE",
-      "description": "Aerial footage captured with DJI Mini 5 Pro in 4K D-Log mode. The cinematic look was achieved through careful color grading and enhancement using DaVinci Resolve."
+      "description": "Aerial footage captured with DJI Mini 5 Pro in 4K D-Log mode. Further color grading and enhancement done using DaVinci Resolve."
     },
     {
-      "src": "videos/dubailovelake.mov",
+      "embed": true,
+      "src": "https://www.facebook.com/reel/1625274075515353",
       "title": "Dubai Love Lake",
       "location": "Dubai, UAE",
-      "description": "Drone footage filmed using DJI Mini 5 Pro in 4K D-Log profile. The video was later professionally color graded and enhanced in DaVinci Resolve to preserve dynamic range and cinematic tones."
+      "description": "Drone footage filmed using DJI Mini 5 Pro in 4K D-Log profile. Enhanced with DaVinci Resolve for cinematic look."
     }
   ]
-
 }
