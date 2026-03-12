@@ -8,7 +8,7 @@
 
 <title>NSF Clix | Video Gallery</title>
 
-<meta name="description" content="Video gallery of NSF Clix featuring cinematic footage, aerial perspectives and visual storytelling.">
+<meta name="description" content="Video gallery of NSF Clix featuring cinematic drone footage and visual storytelling.">
 
 <link rel="stylesheet" href="style.css">
 
@@ -56,122 +56,102 @@
 
 </header>
 
-
 <section class="gallery">
 
 <h2 class="section-title">Video Gallery</h2>
 
 <div class="gallery-grid" id="videoGallery">
-
-<!-- Videos will load here from video.json -->
-
+<!-- Videos loaded dynamically -->
 </div>
 
 </section>
 
-
 <!-- LIGHTBOX -->
-
 <div id="lightbox">
-
 <span class="close-lightbox">&times;</span>
-
-<video class="lightbox-video" controls autoplay style="max-width:90%; max-height:70%; border-radius:10px;"></video>
-
+<div class="lightbox-video-container" style="width:90%; max-height:70%;"></div>
 <div class="lightbox-details"></div>
-
 </div>
 
-
 <footer>
-
 <p>© 2026 NSF Clix • Photography by Nadeem Shahzad Fida</p>
-
 </footer>
-
 
 <script src="script.js"></script>
 
 <script>
-
-/* VIDEO GALLERY LOADER */
+/* VIDEO GALLERY LOADER (Supports Facebook embeds) */
 
 fetch("video.json")
 .then(response => response.json())
 .then(data => {
 
-const gallery = document.getElementById("videoGallery");
+  const gallery = document.getElementById("videoGallery");
 
-data.videos.forEach(video => {
+  data.videos.forEach(video => {
 
-const item = document.createElement("div");
-item.className = "gallery-item";
+    const item = document.createElement("div");
+    item.className = "gallery-item";
 
-item.innerHTML = `
-<video src="${video.src}" muted loop></video>
+    if(video.embed){
+      // Facebook embed thumbnail
+      item.innerHTML = `
+        <div class="fb-thumb" style="width:100%;height:220px;background:#000;color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+          <span style="font-size:16px;text-align:center;">▶ ${video.title}</span>
+        </div>
+        <div class="gallery-overlay">
+          <h3>${video.title}</h3>
+          <p>${video.location}</p>
+        </div>
+        <div class="photo-details">
+          <h3>${video.title}</h3>
+          <p>${video.description}</p>
+        </div>
+      `;
+    }
 
-<div class="gallery-overlay">
-<h3>${video.title}</h3>
-<p>${video.location}</p>
-</div>
+    gallery.appendChild(item);
 
-<div class="photo-details">
-<h3>${video.title}</h3>
-<p>${video.description}</p>
-</div>
-`;
+  });
 
-gallery.appendChild(item);
+  // LIGHTBOX FOR EMBEDDED VIDEOS
+  const items = document.querySelectorAll(".gallery-item");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxContainer = document.querySelector(".lightbox-video-container");
+  const lightboxDetails = document.querySelector(".lightbox-details");
+  const closeLightbox = document.querySelector(".close-lightbox");
 
-});
+  items.forEach((item, index) => {
+    item.addEventListener("click", () => {
 
-/* VIDEO LIGHTBOX */
+      const videoData = data.videos[index];
 
-const items = document.querySelectorAll(".gallery-item");
-const lightbox = document.getElementById("lightbox");
-const lightboxVideo = document.querySelector(".lightbox-video");
-const lightboxDetails = document.querySelector(".lightbox-details");
-const closeLightbox = document.querySelector(".close-lightbox");
+      if(videoData.embed){
+        lightboxContainer.innerHTML = `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoData.src)}&show_text=0&width=560" width="100%" height="100%" style="border:none;overflow:hidden;" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>`;
+      }
 
-items.forEach(item => {
+      lightboxDetails.innerHTML = item.querySelector(".photo-details").innerHTML;
 
-const vid = item.querySelector("video");
-const details = item.querySelector(".photo-details").innerHTML;
+      lightbox.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    });
+  });
 
-vid.addEventListener("click", () => {
+  closeLightbox.addEventListener("click", () => {
+    lightbox.style.display = "none";
+    lightboxContainer.innerHTML = "";
+    document.body.style.overflow = "auto";
+  });
 
-lightbox.style.display = "flex";
-lightboxVideo.src = vid.src;
-lightboxDetails.innerHTML = details;
-
-document.body.style.overflow = "hidden";
-
-});
-
-});
-
-closeLightbox.addEventListener("click", () => {
-
-lightbox.style.display = "none";
-lightboxVideo.pause();
-document.body.style.overflow = "auto";
-
-});
-
-document.addEventListener("keydown", e => {
-
-if(e.key === "Escape"){
-
-lightbox.style.display = "none";
-lightboxVideo.pause();
-document.body.style.overflow = "auto";
-
-}
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape"){
+      lightbox.style.display = "none";
+      lightboxContainer.innerHTML = "";
+      document.body.style.overflow = "auto";
+    }
+  });
 
 });
-
-});
-
 </script>
 
 </body>
